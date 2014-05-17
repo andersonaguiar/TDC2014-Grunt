@@ -1,9 +1,9 @@
 {
-  "name": "GruntFile",
+  "name": "TDC2014 - Grunt",
   "version": "0.1.1",
-  "title": "GruntFile",
-  "description": "Example of a project with Grunt",
-  "url": "https://github.com/andersonaguiar/GruntFile",
+  "title": "TDC2014 - Grunt",
+  "description": "Exemplo Grunt",
+  "url": "https://github.com/andersonaguiar/TDC2014-Grunt",
   "author": {
     "name": "Anderson Aguiar",
     "email": "andersonaguiar.web@gmail.com",

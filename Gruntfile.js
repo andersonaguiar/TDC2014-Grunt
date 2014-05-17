@@ -286,15 +286,4 @@ module.exports = function(grunt) {
 
 		//compress
 		grunt.registerTask('zip', ['compress:dist','compress:all']);    
-
-
-
-	//autoshot - print screen
-	
-	/* 
-		OBS:
-
-		Para rodar o browser-sync é necessário instalá-lo globalmente: npm install -g browser-sync
-	*/
-
 };
