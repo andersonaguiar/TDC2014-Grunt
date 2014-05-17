@@ -9,7 +9,7 @@ module.exports = function(grunt) {
 		cssDir: 	'www/assets/css/',
 		jsDir: 		'www/assets/js/',
 		imgDir: 	'www/assets/img/',
-		distDir: 	'../dist/assets/'
+		distDir: 	'dist/assets/'
 	};
 
 	//Set scripts here for Uglify
@@ -24,11 +24,6 @@ module.exports = function(grunt) {
 		//config path
 		config: PathConfig, 
 
-		//JShint
-		jshint: {
-			files: ['<%= config.distDir %>js/pages/**/*.js']
-		},
-
 		//clean files
 		clean: {
 			options: { force: true },
@@ -36,10 +31,10 @@ module.exports = function(grunt) {
 				src: ["<%= config.cssDir %>"]
 			},
 			distall: {
-				src: ["../dist","../dist.zip","../screenshots"]
+				src: ["dist","dist.zip","screenshots"]
 			},
 			dist: {
-				src: ["../dist"]
+				src: ["dist"]
 			}
 		},
 
@@ -50,25 +45,14 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						dot: true,
-						cwd: '../www',
+						cwd: 'www',
 						src: [
 							'**',
 
-							'!app/**',
-							'!vendor/**',
-							
-							'*.{md,txt,htaccess}',
-							
-							'!*{Gruntfile.js,package.json,config.rb,bs-config.js,readme.md,CONTRIBUTING.md,artisan,composer.json}',
-
-							'!.sass-cache/**',
-							
-							'!public/sass/**',
-							'!public/css/**',
-							
-							'!node_modules/**'
+							'!assets/sass/**',
+							'!assets/css/**',
 						],
-						dest: '../dist/'
+						dest: 'dist/'
 					} // makes all src relative to cwd
 				]
 			}
@@ -120,64 +104,63 @@ module.exports = function(grunt) {
 		},
 
 		//css lint
-		// csslint: {
-		// 	dev: {
-		// 		csslintrc: '.csslintrc'
-		// 	},
-		// 	strict: {
-		// 		src: ['<%= config.distDir %>css/pages/**/*.css']
-		// 	}
-		// },
+		csslint: {
+			dev: {
+				csslintrc: '.csslintrc'
+			},
+			strict: {
+				src: ['<%= config.cssDir %>main.css']
+			}
+		},
+
+		//JShint
+		jshint: {
+			files: ['<%= config.jsDir %>main.js']
+		},
 
 		//compile scss
 		compass: {
 			dist: { 
 				options: { 
-					force: true,
-					config: 'config.rb',
-					sassDir: '<%= config.sassDir %>',
-					cssDir: '<%= config.distDir %>css',
-					outputStyle: 'compressed'
+					force: 			true,
+					config: 		'config.rb',
+					sassDir: 		'<%= config.sassDir %>',
+					cssDir: 		'<%= config.distDir %>css',
+					outputStyle: 	'compressed'
 				}
 			},
 			dev: { 
 				options: {
-					config: 'config.rb',
-					sassDir: '<%= config.sassDir %>',
-					cssDir: '<%= config.cssDir %>',
-					outputStyle: 'nested',
+					config: 		'config.rb',
+					sassDir: 		'<%= config.sassDir %>',
+					cssDir: 		'<%= config.cssDir %>',
+					outputStyle: 	'nested',
 				}
 			}
 		},
 
 		//exec commands
 		exec: {
-			// Generate staging files (not optimized, but after preprocessing)
-			// In docpad, static is used for production ready build
-			// We use it as a pre-production build (staging), but
-			// still environment name for docpad is "static"
-			//
-			// TODO: replace this with docpad wrapper using docpad API
-			//
+		    cmd: 'npm install && bower install && grunt w' //example
 		},
 
 		//FTP deployment
 		'ftp-deploy': {
 			build: {
 				auth: {
-					host: 'ftp.andersonaguiar.com', //your ftp host
-					port: 21,
-					authKey: 'key1' //.ftppass file on the ./
+					host: 		'ftp.andersonaguiar.com', //your ftp host
+					port: 		21,
+					authKey: 	'key1' //.ftppass file on the ./
 				},
-				src: './dist',
+				src: 'dist',
 				dest: 'grunt', //your remote directory(grunt was my test)
 				exclusions: [
 					'./**/.*', //all files what begin with dot
 					'./**/Thumbs.db',
 					'./**/README.md',
 					'./**/*.zip',
-					// './**/node_modules',
-					// './**/dev'
+					'./node_modules',
+					'./dev'
 				]
 			}
 		},
@@ -196,21 +179,11 @@ module.exports = function(grunt) {
 			},
 			dist: {
 				options: {
-					archive: '../dist.zip'
+					archive: 'dist.zip'
 				},
 				files: [
 					{ 
-						/*flatten: true,*/ expand: true, cwd: './', src: ['../dist/**'], dest: '' 
-					}, // includes files in path
-				]
-			},
-			dev: {
-				options: {
-					archive: 'dist/dev.zip'
-				},
-				files: [
-					{ 
-						/*flatten: true,*/ expand: true, cwd: './', src: ['./dev/**'], dest: '' 
+						/*flatten: true,*/ expand: true, cwd: './', src: ['dist/**'], dest: '' 
 					}, // includes files in path
 				]
 			}
@@ -221,14 +194,10 @@ module.exports = function(grunt) {
 		autoshot: {
 			default_options: {
 				options: {
-					path: '../screenshots',
-					filename: 'screenshot',
+					path: 'screenshots',
+					filename: 'exemplo-TDC2014',
 					type: 'jpg',
-					remote: 'http://localhost:8000/admin/usuarios',
-					// local: {
-					// 	path: './public',
-					// 	port: 7788
-					// },
+					remote: 'http://localhost:8888/TDC-2014/www',
 					viewport: [
 						'1920x1080',
 						'1280x1024',
@@ -241,6 +210,20 @@ module.exports = function(grunt) {
 			},
 		},
 
+		//Keep multiple browsers & devices in sync when building websites.
+		browserSync: {
+		    dev: {
+		        bsFiles: {
+		            src : ['www/index.html','www/assets/css/**/*.css']
+		        },
+		        options: {
+		            server: {
+		                baseDir: "www"
+		            }
+		        }
+		    }
+		},
+
 		//watcher project
 		watch: {
 			options: {
@@ -248,37 +231,50 @@ module.exports = function(grunt) {
 			},
 			css: {
 				files: ['<%= config.sassDir %>**/*'],
-				tasks: ['compass:dev'/*, 'csslint:strict'*/]
+				tasks: ['compass:dev', 'csslint:strict']
 			},
-			// js: {
-			// 	files: [
-			// 		'<%= config.dev %>**/js/*.js',
-			// 	],
-			// 	tasks: ['uglify:dev','jshint']
-			// },
-			// livereload: {
-			// 	options: {
-			// 		livereload: true
-			// 	},
-			// 	files: ['<%= config.dev %>assets/css/*.css', '<%= config.dev %>assets/js/scripts.js', '<%= config.dev %>**.html']
-			// }
+			js: {
+				files: [
+					'<%= config.jsDir %>**/*.js',
+				],
+				tasks: ['jshint']
+			}
 		} // watch 
 
 	});
 
-	//watch
-	grunt.registerTask('w', ['watch']);
-
 	//dev
-	grunt.registerTask('dev', ['compass:dev']);
+		//watch
+		grunt.registerTask('w', ['watch']);
 
-	//clean CSS
-	grunt.registerTask('clean-css', ['clean:css']);
+		//browser sync
+		grunt.registerTask('bs', ['browserSync']);
 
-	//deploy
-	// grunt.registerTask('deploy', ['ftp-deploy:build']);
+		//exec
+		grunt.registerTask('letsgo', ['exec']);
 
-	//build
-	grunt.registerTask('dist', ['clean:distall', 'copy:dist', /*'compress:dist','autoshot', 'compass:dist', */  'compass:dist', 'jshint', 'concat:js', 'concat:css', 'imagemin:dist'/*  'clean:dist'*/ ]);
+		//dev
+		grunt.registerTask('dev', ['compass:dev']);
+
+
+	//finally	
+		//build
+		grunt.registerTask('dist', ['clean:distall', 'copy:dist', /*'compress:dist','autoshot', 'compass:dist', */  'compass:dist', 'jshint', 'concat:js', 'concat:css', 'imagemin:dist'/*  'clean:dist'*/ ]);
+		
+		//deploy
+		grunt.registerTask('deploy', ['ftp-deploy:build']);
+
+		//compress
+		grunt.registerTask('zip', ['compress:dist','compress:all']);    
+
+
+
+	//autoshot - print screen
+	
+	/* 
+		OBS:
+
+		Para rodar o browser-sync é necessário instalá-lo globalmente: npm install -g browser-sync
+	*/
 
 };
