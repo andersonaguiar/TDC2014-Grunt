@@ -224,6 +224,26 @@ module.exports = function(grunt) {
 		    }
 		},
 
+		uncss: {
+		  dist: {
+		    options: {
+		      // ignore       : ['#added_at_runtime', /test\-[0-9]+/],
+		      // media        : ['(min-width: 700px) handheld and (orientation: landscape)'],
+		      // csspath      : '../public/css/',
+		      // raw          : 'h1 { color: green }',
+		      // stylesheets  : ['lib/bootstrap/dist/css/bootstrap.css', 'src/public/css/main.css'],
+		      // ignoreSheets : [/fonts.googleapis/],
+		      // urls         : ['http://localhost:3000/mypage', '...'], // Deprecated
+		      // timeout      : 1000,
+		      // htmlroot     : 'public',
+		      // report       : 'min'
+		    },
+		    files: {
+		      'dist/assets/css/uncss.css': ['www/index.html']
+		    }
+		  }
+		},
+
 		//watcher project
 		watch: {
 			options: {
@@ -259,7 +279,7 @@ module.exports = function(grunt) {
 
 	//finally	
 		//build
-		grunt.registerTask('dist', ['clean:distall', 'copy:dist', /*'compress:dist','autoshot', 'compass:dist', */  'compass:dist', 'jshint', 'concat:js', 'concat:css', 'imagemin:dist'/*  'clean:dist'*/ ]);
+		grunt.registerTask('dist', ['clean:distall', 'copy:dist', 'compress:dist', 'compass:dist', 'jshint', 'csslint:strict', 'concat:js', 'concat:css', 'imagemin:dist', 'autoshot',/*  'clean:dist'*/ ]);
 		
 		//deploy
 		grunt.registerTask('deploy', ['ftp-deploy:build']);
